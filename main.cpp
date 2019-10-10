@@ -7,63 +7,54 @@ using namespace std;
 //recusively finds the longest non-chopped string
 string findlongeststringin(string checkString) {
 
-
-    cout << "checking string: " << checkString << endl;
-    cout << "size of current checked string is: " << checkString.size() << endl;
-
+    //cout << "checking sub-string: " << checkString << endl;
     if (checkString.at(checkString.size() - 1) == ('.') || checkString.at(checkString.size() - 1) == (' ')) {
-        cout << "good substring found : " << checkString << endl;
+        //cout << "good substring found : " << checkString << endl;
         return checkString;
     } else {
-        cout << "Word is chopped" << endl;
+        //cout << "Word is chopped" << endl;
         return findlongeststringin(checkString.substr(0, checkString.size() - 1));
     }
 }
 
 int main() {
 
-    cout << "This program reads text from a inputFileStream, trims to the desired width, and saves it to a new file"
-         << endl;
-
-    int width = 20;
-    ifstream inputFileStream("input.txt", ios::in);
-    ofstream outputFileStream("outputfile.txt", ios::out);
+    cout << "This program reads text from input.txt, trims to the desired width, and saves it to a new file, output.txt \n" << endl;
 
     //Arraylist to hold the formatted strings
     vector<string> formattedOutput;
-
-    //Temporary strings
     string filecontents;
     string str;
 
+    int width;
+    cout << "Enter desired column width: ";
+    cin >> width;
+
     //Read input inputFileStream line by line into a single string, filecontents
+    ifstream inputFileStream("input.txt", ios::in);
     while (getline(inputFileStream, str)) {
         filecontents += str;
     }
-    cout << "checking filecontents : ";
-    cout << filecontents << endl;
-    cout << "number of characters: " << filecontents.size() << endl;
+    inputFileStream.close();
 
     //Process the input
     int a = 0;
-    int b = a + width;
+    int padding = 0;
     while (a < filecontents.size()) {                                       //until we have read every character
-        cout << "finding substring from " << a << " and " << b << endl;
-        //cout << filecontents.substr(a, b) << endl;           //SOMETHING GOING WRONG HERE
-        str = findlongeststringin(
-                filecontents.substr(a, b - a));              //use recursive method to find valid substring
+        str = findlongeststringin(filecontents.substr(a, width));              //use recursive method to find valid substring
+        a += str.length();                                                //update next start index
+        padding = width -str.length();                                      //Center text
+        for (int i = 0; i < padding/2; i++){
+            str = " "+str;                                                  //By inserting leading spaces
+        }
         formattedOutput.push_back(str);                                    //add trimmed string to output
-        a = a + str.size();                                                //update next start index
-        b = a + width;                                                     //update next possible end index
-        cout << "new a = " << a << endl;                                   //console logs to confirm
-        cout << "new b = " << b << endl;
     }
 
-
-    //Write results from output array of trimmed strings to the file and close
-    for (int i = 0; i < formattedOutput.size(); i++) {
-        cout << "writing to file: " << formattedOutput[i] << endl;
+    ofstream outputFileStream("~/new/outputfile.txt", ios::out);
+    cout << "\n \n =======Writing to outputfile.txt=====" << endl;
+    for (int i = 0; i < formattedOutput.size(); i++) {              //Write results and close
         outputFileStream << formattedOutput[i] << endl;
+        cout << formattedOutput[i] << endl;
     }
     outputFileStream.close();
     return 0;
