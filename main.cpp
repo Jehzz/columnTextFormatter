@@ -4,7 +4,7 @@
 
 using namespace std;
 
-//recusively finds the longest non-chopped string
+//recursively finds the longest non-chopped string
 string findlongeststringin(string checkString) {
 
     //cout << "checking sub-string: " << checkString << endl;
@@ -33,6 +33,7 @@ int main() {
     //Read input inputFileStream line by line into a single string, filecontents
     ifstream inputFileStream("input.txt", ios::in);
     while (getline(inputFileStream, str)) {
+        str += ' ';                                     //pad a space to account for newlines and sentences
         filecontents += str;
     }
     inputFileStream.close();
@@ -50,7 +51,7 @@ int main() {
         formattedOutput.push_back(str);                                    //add trimmed string to output
     }
 
-    ofstream outputFileStream("~/new/outputfile.txt", ios::out);
+    ofstream outputFileStream("outputfile.txt", ios::out);
     cout << "\n \n =======Writing to outputfile.txt=====" << endl;
     for (int i = 0; i < formattedOutput.size(); i++) {              //Write results and close
         outputFileStream << formattedOutput[i] << endl;
